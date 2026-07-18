@@ -30,8 +30,23 @@
   var svcImg = document.getElementById('svcImg');
   var svcTitle = document.getElementById('svcTitle');
   var svcDesc = document.getElementById('svcDesc');
+  var svcLayout = document.getElementById('svcLayout');
+  var svcPanel = document.getElementById('svcPanel');
   var rows = [];
   var active = 0;
+
+  // On mobile the panel sits inline under the selected row (accordion style),
+  // so the image is always visible next to the tap. On desktop it stays in
+  // the sticky right column.
+  var mobileMQ = window.matchMedia('(max-width: 860px)');
+  function placePanel() {
+    if (mobileMQ.matches && rows[active]) {
+      rows[active].insertAdjacentElement('afterend', svcPanel);
+    } else if (svcPanel.parentElement !== svcLayout) {
+      svcLayout.appendChild(svcPanel);
+    }
+  }
+  if (mobileMQ.addEventListener) mobileMQ.addEventListener('change', placePanel);
 
   data.forEach(function (s, i) {
     var row = document.createElement('div');
@@ -81,6 +96,7 @@
     active = i;
     imgIdx = 0;
     rows.forEach(function (r, idx) { r.classList.toggle('active', idx === i); });
+    placePanel();
     svcImg.style.opacity = '0';
     requestAnimationFrame(function () {
       svcImg.src = data[i].imgs[0];
@@ -95,6 +111,7 @@
   // First service starts rotating on load.
   svcImg.src = data[0].imgs[0];
   svcImg.alt = data[0].title;
+  placePanel();
   startRotation();
 
   // Re-run reveal observer for rows injected after main.js already ran.

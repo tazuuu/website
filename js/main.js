@@ -10,6 +10,26 @@
     onScroll();
   }
 
+  // Mobile hamburger menu.
+  var toggle = document.getElementById('navToggle');
+  if (toggle && nav) {
+    toggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('menu-open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    // Close when a link is chosen or when tapping outside the nav.
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('.nav-links a')) nav.classList.remove('menu-open');
+    });
+    document.addEventListener('click', function (e) {
+      if (nav.classList.contains('menu-open') && !nav.contains(e.target)) {
+        nav.classList.remove('menu-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
   var revealEls = document.querySelectorAll('[data-reveal]');
   if ('IntersectionObserver' in window && revealEls.length) {
     var io = new IntersectionObserver(function (entries) {

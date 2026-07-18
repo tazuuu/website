@@ -71,26 +71,85 @@
     });
   }
 
+  var shown = [];
+
   function renderGrid() {
-    var list = active === 'All' ? items : items.filter(function (x) { return x.cat === active; });
+    shown = active === 'All' ? items : items.filter(function (x) { return x.cat === active; });
     gridEl.innerHTML = '';
-    list.forEach(function (w) {
-      var a = document.createElement('a');
-      a.href = '/contact';
-      a.className = 'portfolio-card';
-      a.setAttribute('data-reveal', '');
-      a.style.gridColumn = 'span ' + w.span;
-      a.innerHTML =
+    shown.forEach(function (w, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'portfolio-card';
+      b.setAttribute('data-reveal', '');
+      b.setAttribute('aria-label', 'View ' + w.title + ' — ' + w.sub);
+      b.style.gridColumn = 'span ' + w.span;
+      b.innerHTML =
         '<div class="thumb" style="aspect-ratio:' + w.ratio + ';">' +
           '<img src="' + w.img + '" alt="' + w.title + '" loading="lazy">' +
           '<div class="thumb-shade" aria-hidden="true"></div>' +
           '<div class="cat">' + w.cat + '</div>' +
           '<div class="info"><div class="t anton">' + w.title + '</div><div class="s">' + w.sub + '</div></div>' +
         '</div>';
-      gridEl.appendChild(a);
+      b.addEventListener('click', function () { openLightbox(i); });
+      gridEl.appendChild(b);
     });
     observeReveal(Array.from(gridEl.querySelectorAll('[data-reveal]')));
   }
+
+  // ---- Lightbox ----
+  var lb = document.createElement('div');
+  lb.className = 'lightbox';
+  lb.hidden = true;
+  lb.innerHTML =
+    '<button type="button" class="lb-btn lb-close" aria-label="Close">&#215;</button>' +
+    '<button type="button" class="lb-btn lb-prev" aria-label="Previous image">&#8592;</button>' +
+    '<figure class="lb-figure">' +
+      '<img class="lb-img" alt="">' +
+      '<figcaption class="lb-caption"><span class="lb-cat"></span><span class="lb-title anton"></span><span class="lb-sub"></span></figcaption>' +
+    '</figure>' +
+    '<button type="button" class="lb-btn lb-next" aria-label="Next image">&#8594;</button>';
+  document.body.appendChild(lb);
+
+  var lbImg = lb.querySelector('.lb-img');
+  var lbIdx = 0, lastFocus = null;
+
+  function showAt(i) {
+    lbIdx = (i + shown.length) % shown.length;
+    var w = shown[lbIdx];
+    lbImg.src = w.img;
+    lbImg.alt = w.title;
+    lb.querySelector('.lb-cat').textContent = w.cat;
+    lb.querySelector('.lb-title').textContent = w.title;
+    lb.querySelector('.lb-sub').textContent = w.sub;
+  }
+
+  function openLightbox(i) {
+    lastFocus = document.activeElement;
+    showAt(i);
+    lb.hidden = false;
+    document.body.style.overflow = 'hidden';
+    lb.querySelector('.lb-close').focus();
+  }
+
+  function closeLightbox() {
+    lb.hidden = true;
+    lbImg.src = '';
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+
+  lb.querySelector('.lb-close').addEventListener('click', closeLightbox);
+  lb.querySelector('.lb-prev').addEventListener('click', function () { showAt(lbIdx - 1); });
+  lb.querySelector('.lb-next').addEventListener('click', function () { showAt(lbIdx + 1); });
+  lb.addEventListener('click', function (e) {
+    if (e.target === lb || e.target.classList.contains('lb-figure')) closeLightbox();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowLeft') showAt(lbIdx - 1);
+    else if (e.key === 'ArrowRight') showAt(lbIdx + 1);
+  });
 
   function observeReveal(els) {
     if ('IntersectionObserver' in window) {
