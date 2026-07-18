@@ -4,17 +4,52 @@
   var gridEl = document.getElementById('portfolioGrid');
   if (!filtersEl || !gridEl) return;
 
-  var cats = ['All', 'Signage', 'Vehicle', 'Campaign', 'LED Wall', 'Printing'];
-  var items = [
-    { img: 'assets/signage.png', title: 'Nice Times Cafeteria', sub: 'Facade signage & lighting', cat: 'Signage', span: 7, ratio: '16/10' },
-    { img: 'assets/gifts.png', title: 'Ahlnar Foods', sub: 'Refrigerated fleet wrap', cat: 'Vehicle', span: 5, ratio: '16/12' },
-    { img: 'assets/ledwall.png', title: 'ColorLit 4K', sub: 'Indoor LED video wall', cat: 'LED Wall', span: 5, ratio: '16/12' },
-    { img: 'assets/events.png', title: 'Big Deal Mart', sub: 'Retail campaign & display', cat: 'Campaign', span: 7, ratio: '16/10' },
-    { img: 'assets/uvprint.png', title: 'Ten Markets', sub: 'Mega Shopping promotion', cat: 'Campaign', span: 7, ratio: '16/10' },
-    { img: 'assets/vehicle.png', title: 'Loyalty & VIP Cards', sub: 'PVC card design & print', cat: 'Printing', span: 5, ratio: '16/12' },
-    { img: 'assets/engraving.png', title: 'Diagram Merch', sub: 'Branded team apparel', cat: 'Printing', span: 5, ratio: '16/12' },
-    { img: 'assets/screenprint.png', title: 'Etched Metal Badges', sub: 'Engraving & etching', cat: 'Printing', span: 7, ratio: '16/10' }
+  var services = [
+    { slug: '3d-signage', cat: '3D Signage', sub: 'Illuminated & fabricated signage' },
+    { slug: 'led-wall', cat: 'LED Wall', sub: 'Indoor & outdoor displays' },
+    { slug: 'vehicle-graphics', cat: 'Vehicle Graphics', sub: 'Wraps & fleet branding' },
+    { slug: 'vinyl-sticker', cat: 'Vinyl Sticker', sub: 'Cut & large-format vinyl' },
+    { slug: 'uv-printing', cat: 'UV Printing', sub: 'Direct-to-surface printing' },
+    { slug: 'engraving', cat: 'Engraving', sub: 'Etching & engraving' },
+    { slug: 'loyalty-id-cards', cat: 'ID & Loyalty Cards', sub: 'PVC card design & print' },
+    { slug: 'event-management', cat: 'Event Management', sub: 'Exhibitions & stands' },
+    { slug: 'event-promotion', cat: 'Event Promotion', sub: 'Activations & promos' }
   ];
+
+  var cats = ['All'].concat(services.map(function (s) { return s.cat; }));
+
+  var items = [
+    { img: 'assets/signage.png', title: 'Nice Times Cafeteria', sub: 'Facade signage & lighting', cat: '3D Signage' },
+    { img: 'assets/gifts.png', title: 'Ahlnar Foods', sub: 'Refrigerated fleet wrap', cat: 'Vehicle Graphics' },
+    { img: 'assets/ledwall.png', title: 'ColorLit 4K', sub: 'Indoor LED video wall', cat: 'LED Wall' },
+    { img: 'assets/events.png', title: 'Big Deal Mart', sub: 'Retail campaign & display', cat: 'Event Promotion' },
+    { img: 'assets/uvprint.png', title: 'Ten Markets', sub: 'Mega Shopping promotion', cat: 'Event Promotion' },
+    { img: 'assets/vehicle.png', title: 'Loyalty & VIP Cards', sub: 'PVC card design & print', cat: 'ID & Loyalty Cards' },
+    { img: 'assets/engraving.png', title: 'Diagram Merch', sub: 'Branded team apparel', cat: 'UV Printing' },
+    { img: 'assets/screenprint.png', title: 'Etched Metal Badges', sub: 'Engraving & etching', cat: 'Engraving' }
+  ];
+
+  // Interleave the PDF image sets round-robin so 'All' mixes categories.
+  var sets = window.SERVICE_IMAGES || {};
+  var queues = services.map(function (s) {
+    return (sets[s.slug] || []).map(function (img) {
+      return { img: img, title: s.cat, sub: s.sub, cat: s.cat };
+    });
+  });
+  var added = true;
+  while (added) {
+    added = false;
+    queues.forEach(function (q) {
+      if (q.length) { items.push(q.shift()); added = true; }
+    });
+  }
+
+  // Alternate wide/narrow cards for a varied grid rhythm.
+  items.forEach(function (w, i) {
+    var wide = i % 4 === 0 || i % 4 === 3;
+    w.span = wide ? 7 : 5;
+    w.ratio = wide ? '16/10' : '16/12';
+  });
 
   var active = 'All';
 
@@ -41,7 +76,7 @@
     gridEl.innerHTML = '';
     list.forEach(function (w) {
       var a = document.createElement('a');
-      a.href = 'contact.html';
+      a.href = '/contact';
       a.className = 'portfolio-card';
       a.setAttribute('data-reveal', '');
       a.style.gridColumn = 'span ' + w.span;

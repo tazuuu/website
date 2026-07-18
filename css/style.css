@@ -52,6 +52,9 @@ button{font-family:Archivo,sans-serif}
   overflow:hidden;flex-shrink:0;
 }
 .nav-badge img{width:23px;height:23px;object-fit:contain}
+.nav-wordmark{display:flex;flex-direction:column;line-height:1}
+.nav-wordmark .top{font-size:21px;letter-spacing:.8px;color:var(--fg)}
+.nav-wordmark .sub{font-size:8px;letter-spacing:3.2px;color:var(--accent);font-weight:800;margin-top:4px}
 .nav-links{display:flex;align-items:center;gap:clamp(18px,3vw,40px)}
 .nav-link{position:relative;font-size:14px;font-weight:600;letter-spacing:.3px;color:var(--fg);padding:6px 0}
 .nav-link:hover{color:var(--fg)}
@@ -146,19 +149,26 @@ button{font-family:Archivo,sans-serif}
 .link-underline{font-size:14px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;border-bottom:2px solid var(--accent);padding-bottom:4px;color:var(--fg)}
 .link-underline:hover{color:var(--fg)}
 
-.filmstrip{display:flex;gap:20px;overflow-x:auto;padding:6px clamp(20px,5vw,64px) 22px;scroll-snap-type:x mandatory;scrollbar-width:none;cursor:grab}
+.filmstrip{display:flex;gap:20px;overflow-x:auto;padding:6px clamp(20px,5vw,64px) 22px;scroll-snap-type:x mandatory;scroll-padding-inline:clamp(20px,5vw,64px);scrollbar-width:none;cursor:grab}
 .filmstrip::-webkit-scrollbar{display:none}
 .filmstrip.dragging{cursor:grabbing}
 .filmstrip-card{scroll-snap-align:start;flex:0 0 clamp(250px,30vw,330px);text-decoration:none;color:var(--fg)}
 .filmstrip-card .thumb{position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:#161616;border:1px solid rgba(245,244,241,0.08)}
 .filmstrip-card img{width:100%;height:100%;object-fit:cover;filter:grayscale(.45);transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .5s ease}
 .filmstrip-card:hover img{transform:scale(1.05);filter:grayscale(0)}
+.filmstrip-card .rot-img{position:absolute;inset:0;opacity:0;transition:opacity .9s ease,filter .5s ease}
+.filmstrip-card .rot-img.show{opacity:1}
 .thumb-fade{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,0.9),rgba(10,10,10,0.05) 55%)}
 .thumb-num{position:absolute;top:16px;left:16px;font-size:14px;color:var(--accent);background:rgba(10,10,10,0.55);border:1px solid rgba(245,244,241,0.18);width:36px;height:36px;border-radius:50%;display:grid;place-items:center}
 .thumb-info{position:absolute;left:20px;right:20px;bottom:20px}
 .thumb-info .t{font-size:23px;text-transform:uppercase;line-height:1}
 .thumb-info .s{font-size:13px;color:rgba(245,244,241,0.62);font-weight:500;margin-top:7px}
-.drag-hint{max-width:1280px;margin:0 auto;padding:6px clamp(20px,5vw,64px) 0;font-size:11px;letter-spacing:2px;color:rgba(245,244,241,0.38);font-weight:700}
+.drag-hint{font-size:11px;letter-spacing:2px;color:rgba(245,244,241,0.38);font-weight:700}
+.strip-nav{max-width:1280px;margin:0 auto;padding:6px clamp(20px,5vw,64px) 0;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.strip-arrows{display:flex;gap:10px}
+.strip-arrow{width:42px;height:42px;border-radius:50%;border:1px solid rgba(245,244,241,0.22);background:transparent;color:var(--fg);font-size:18px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:background .25s,border-color .25s,opacity .25s}
+.strip-arrow:hover{background:var(--accent);border-color:var(--accent)}
+.strip-arrow:disabled{opacity:.3;cursor:default;background:transparent;border-color:rgba(245,244,241,0.22)}
 
 /* WORK PREVIEW (light section on home) */
 .work-preview{padding:clamp(70px,10vw,130px) clamp(20px,5vw,64px);background:var(--fg);color:var(--bg)}
@@ -182,6 +192,10 @@ button{font-family:Archivo,sans-serif}
 .clients-row{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(24px,5vw,64px);align-items:center}
 .clients-row span{font-size:clamp(20px,2.4vw,30px);color:rgba(245,244,241,0.4);letter-spacing:.5px;text-transform:uppercase;transition:color .3s}
 .clients-row span:hover{color:var(--fg)}
+.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:clamp(12px,1.5vw,20px)}
+.client-logo{background:#fff;border-radius:12px;padding:18px;display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;filter:grayscale(1);opacity:.75;transition:filter .3s,opacity .3s,transform .3s}
+.client-logo:hover{filter:grayscale(0);opacity:1;transform:translateY(-3px)}
+.client-logo img{max-width:100%;max-height:100%;object-fit:contain}
 
 /* FOOTER */
 .footer{background:var(--bg);color:var(--fg);padding:clamp(56px,8vw,110px) clamp(20px,5vw,64px) 40px;border-top:1px solid rgba(245,244,241,0.08);position:relative;overflow:hidden}
