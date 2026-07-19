@@ -20,7 +20,7 @@
 
   var items = [
     { img: 'assets/signage.png', title: 'Nice Times Cafeteria', sub: 'Facade signage & lighting', cat: '3D Signage' },
-    { img: 'assets/gifts.png', title: 'Ahlnar Foods', sub: 'Refrigerated fleet wrap', cat: 'Vehicle Graphics' },
+    { img: 'assets/gifts.png', title: 'Al Hikiya Food Stuff', sub: 'Refrigerated fleet wrap', cat: 'Vehicle Graphics' },
     { img: 'assets/ledwall.png', title: 'ColorLit 4K', sub: 'Indoor LED video wall', cat: 'LED Wall' },
     { img: 'assets/events.png', title: 'Big Deal Mart', sub: 'Retail campaign & display', cat: 'Event Promotion' },
     { img: 'assets/uvprint.png', title: 'Ten Markets', sub: 'Mega Shopping promotion', cat: 'Event Promotion' },
@@ -29,10 +29,25 @@
     { img: 'assets/screenprint.png', title: 'Etched Metal Badges', sub: 'Engraving & etching', cat: 'Engraving' }
   ];
 
+  // Gallery files that are the same photos as the named cards above — skipped
+  // so the grid doesn't show the same work twice.
+  var dupes = {
+    'images/services/3d-signage/3d-signage-01.jpg': 1,
+    'images/services/vehicle-graphics/vehicle-graphics-02.jpg': 1,
+    'images/services/led-wall/led-wall-04.jpg': 1,
+    'images/services/vinyl-sticker/vinyl-sticker-01.jpg': 1,
+    'images/services/event-promotion/event-promotion-01.jpg': 1,
+    'images/services/loyalty-id-cards/loyalty-id-cards-03.jpg': 1,
+    'images/services/uv-printing/uv-printing-01.jpg': 1,
+    'images/services/engraving/engraving-01.jpg': 1
+  };
+
   // Interleave the PDF image sets round-robin so 'All' mixes categories.
   var sets = window.SERVICE_IMAGES || {};
   var queues = services.map(function (s) {
-    return (sets[s.slug] || []).map(function (img) {
+    return (sets[s.slug] || []).filter(function (img) {
+      return !dupes[img];
+    }).map(function (img) {
       return { img: img, title: s.cat, sub: s.sub, cat: s.cat };
     });
   });

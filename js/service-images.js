@@ -3,9 +3,9 @@
   var counts = {
     'led-wall': 6,
     '3d-signage': 6,
-    'vehicle-graphics': 7,
-    'vinyl-sticker': 8,
-    'uv-printing': 6,
+    'vehicle-graphics': 6,
+    'vinyl-sticker': 6,
+    'uv-printing': 5,
     'engraving': 6,
     'loyalty-id-cards': 6,
     'event-management': 6,
