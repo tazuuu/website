@@ -20,7 +20,7 @@
 
   var items = [
     { img: 'assets/signage.png', title: 'Nice Times Cafeteria', sub: 'Facade signage & lighting', cat: '3D Signage' },
-    { img: 'assets/gifts.png', title: 'Al Hikiya Food Stuff', sub: 'Refrigerated fleet wrap', cat: 'Vehicle Graphics' },
+    { img: 'assets/gifts.png', title: 'Al Hikaya Food Stuff', sub: 'Refrigerated fleet wrap', cat: 'Vehicle Graphics' },
     { img: 'assets/ledwall.png', title: 'ColorLit 4K', sub: 'Indoor LED video wall', cat: 'LED Wall' },
     { img: 'assets/events.png', title: 'Big Deal Mart', sub: 'Retail campaign & display', cat: 'Event Promotion' },
     { img: 'assets/uvprint.png', title: 'Ten Markets', sub: 'Mega Shopping promotion', cat: 'Event Promotion' },
